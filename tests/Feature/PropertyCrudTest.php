@@ -22,6 +22,21 @@ class PropertyCrudTest extends TestCase
 
         $response->assertOk();
         $response->assertSee('Properties');
+        $response->assertSee('Server-rendered property listing and search.');
+    }
+
+    public function test_authenticated_user_can_view_vue_property_index(): void
+    {
+        $user = User::factory()->create();
+        Property::factory()->count(3)->create();
+
+        $response = $this
+            ->actingAs($user)
+            ->get(route('properties.vue-index'));
+
+        $response->assertOk();
+        $response->assertSee('Properties Vue');
+        $response->assertSee('propertyApp');
     }
 
     public function test_authenticated_user_can_create_property(): void
@@ -68,16 +83,16 @@ class PropertyCrudTest extends TestCase
 
         $response = $this
             ->actingAs($user)
-            ->get(route('properties.index', [
+            ->getJson(route('properties.search', [
                 'name' => 'Victoria',
                 'price_min' => 300000,
                 'price_max' => 500000,
             ]));
 
         $response->assertOk();
-        $response->assertSee('Victoria Gardens');
-        $response->assertDontSee('Victoria Ridge');
-        $response->assertDontSee('Harbour View Estate');
+        $response->assertJsonPath('success', true);
+        $response->assertJsonCount(1, 'data.properties');
+        $response->assertJsonPath('data.properties.0.name', 'Victoria Gardens');
     }
 
     public function test_authenticated_user_can_filter_properties_by_exact_numeric_fields(): void
@@ -102,7 +117,7 @@ class PropertyCrudTest extends TestCase
 
         $response = $this
             ->actingAs($user)
-            ->get(route('properties.index', [
+            ->getJson(route('properties.search', [
                 'bedrooms' => 4,
                 'bathrooms' => 2,
                 'storeys' => 2,
@@ -110,8 +125,9 @@ class PropertyCrudTest extends TestCase
             ]));
 
         $response->assertOk();
-        $response->assertSee('Harbour Springs');
-        $response->assertDontSee('Harbour Heights');
+        $response->assertJsonPath('success', true);
+        $response->assertJsonCount(1, 'data.properties');
+        $response->assertJsonPath('data.properties.0.name', 'Harbour Springs');
     }
 
     public function test_authenticated_user_can_update_property(): void

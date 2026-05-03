@@ -2,7 +2,7 @@
     <div class="page-header">
         <div>
             <h1 class="page-title">Properties</h1>
-            <p class="page-copy">Manage the property catalogue from one place.</p>
+            <p class="page-copy">Server-rendered property listing and search.</p>
         </div>
 
         <div class="toolbar">
@@ -10,9 +10,12 @@
                 <i class="fa-solid fa-plus" aria-hidden="true"></i>
                 <span>New Property</span>
             </a>
+            <a href="{{ route('properties.vue-index') }}" class="button secondary">
+                <i class="fa-solid fa-bolt" aria-hidden="true"></i>
+                <span>Vue View</span>
+            </a>
         </div>
     </div>
-
     <section class="panel">
         <div class="panel-body" style="border-bottom: 1px solid #e5e7eb;">
             <form method="get" action="{{ route('properties.index') }}">

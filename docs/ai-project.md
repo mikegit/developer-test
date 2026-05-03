@@ -62,10 +62,15 @@ Keep it as simple as possible for now.
 
 #5 Adding vuejs - upgrading basic app to use simepl vuejs v3
 
+
+Lets create a new index view which will be an upgraded version fo our initial index list screen.
+
+Call it list-enhanced
+
+
 For the index view:
 - Inlcude vue v3 via CDN and axios
 - Within the index view setup the app as follows:
-
 
 Include resources
 
@@ -80,7 +85,7 @@ Include resources
 
 Create app wrapper
 
-- Add in some basic vue css for transistions and v-clock if not already exist
+- Add in some basic vue css for transistions and v-clock if not already exist, eg:
 
 
 ```bladehtml
@@ -88,6 +93,11 @@ Create app wrapper
 ```
 
 Initial data can be passed to vue app like this
+
+So serversite lets pass all view data vie appData.
+
+Include all properties.  We'll assume the list is not going to be very large.
+
 
 ```bladehtml
 

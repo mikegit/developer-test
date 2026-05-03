@@ -1,0 +1,93 @@
+# =========================
+# ENV / Secrets
+# =========================
+.env
+.env.*
+*.key
+*.pem
+*.crt
+*.p12
+
+# =========================
+# Laravel storage (sensitive + noisy)
+# =========================
+storage/*
+!storage/app/public
+!storage/framework/cache/data/.gitignore
+
+# Logs
+storage/logs/*
+*.log
+
+# Cache / sessions / views
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+
+# =========================
+# Vendor (huge + irrelevant)
+# =========================
+vendor/
+
+# =========================
+# Node / frontend build
+# =========================
+node_modules/
+public/build/
+public/hot
+*.vite
+dist/
+
+# =========================
+# IDE / OS junk
+# =========================
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# =========================
+# Git
+# =========================
+.git/
+.gitignore
+
+# =========================
+# Tests (optional)
+# =========================
+tests/
+phpunit.xml
+
+# =========================
+# Database / dumps
+# =========================
+*.sql
+*.sqlite
+
+# =========================
+# Uploads / media
+# =========================
+public/storage/*
+public/uploads/*
+public/media/*
+
+# =========================
+# Backups / temp files
+# =========================
+*.zip
+*.tar
+*.gz
+*.bak
+*.tmp
+
+# =========================
+# Custom (optional)
+# =========================
+/docs/internal/*
+/scripts/*
+
+
+# =========================
+# AI Guidance (not ignored)
+# =========================
+# See docs/ai-guidelines.md for project conventions

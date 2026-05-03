@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StorePropertyRequest;
 use App\Http\Requests\UpdatePropertyRequest;
 use App\Models\Property;
+use App\Support\JsendResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -13,43 +15,55 @@ class PropertyController extends Controller
 {
     public function index(Request $request): View
     {
-        $filters = $request->validate([
-            'name' => ['nullable', 'string', 'max:255'],
-            'bedrooms' => ['nullable', 'integer', 'min:0', 'max:255'],
-            'bathrooms' => ['nullable', 'integer', 'min:0', 'max:255'],
-            'storeys' => ['nullable', 'integer', 'min:1', 'max:255'],
-            'garages' => ['nullable', 'integer', 'min:0', 'max:255'],
-            'price_min' => ['nullable', 'numeric', 'min:0', 'max:99999999999.99'],
-            'price_max' => ['nullable', 'numeric', 'min:0', 'max:99999999999.99'],
-        ]);
+        $filters = $request->validate($this->filterRules());
 
         $properties = Property::query()
-            ->when($filters['name'] ?? null, function ($query, $name) {
-                $query->where('name', 'like', '%'.$name.'%');
-            })
-            ->when($filters['bedrooms'] ?? null, function ($query, $bedrooms) {
-                $query->where('bedrooms', $bedrooms);
-            })
-            ->when($filters['bathrooms'] ?? null, function ($query, $bathrooms) {
-                $query->where('bathrooms', $bathrooms);
-            })
-            ->when($filters['storeys'] ?? null, function ($query, $storeys) {
-                $query->where('storeys', $storeys);
-            })
-            ->when($filters['garages'] ?? null, function ($query, $garages) {
-                $query->where('garages', $garages);
-            })
-            ->when($filters['price_min'] ?? null, function ($query, $priceMin) {
-                $query->where('price', '>=', $priceMin);
-            })
-            ->when($filters['price_max'] ?? null, function ($query, $priceMax) {
-                $query->where('price', '<=', $priceMax);
-            })
+            ->filter($filters)
             ->orderBy('name')
             ->paginate(15)
             ->withQueryString();
 
         return view('properties.index', [
+            'properties' => $properties,
+            'filters' => $filters,
+        ]);
+    }
+
+    public function vueIndex(Request $request): View
+    {
+        $filters = $request->validate($this->filterRules());
+
+        return view('properties.index-vue', [
+            'appData' => [
+                'filters' => $filters,
+                'searchUrl' => route('properties.search'),
+                'createUrl' => route('properties.create'),
+                'indexUrl' => route('properties.index'),
+                'showUrlTemplate' => route('properties.show', ['property' => '__PROPERTY_ID__']),
+                'editUrlTemplate' => route('properties.edit', ['property' => '__PROPERTY_ID__']),
+            ],
+        ]);
+    }
+
+    public function search(Request $request): JsonResponse
+    {
+        $filters = $request->validate($this->filterRules());
+
+        $properties = Property::query()
+            ->filter($filters)
+            ->orderBy('name')
+            ->get([
+                'id',
+                'name',
+                'price',
+                'bedrooms',
+                'bathrooms',
+                'storeys',
+                'garages',
+                'is_test',
+            ]);
+
+        return JsendResponse::success('Properties fetched successfully.', [
             'properties' => $properties,
             'filters' => $filters,
         ]);
@@ -112,5 +126,21 @@ class PropertyController extends Controller
         $validated['is_test'] = (bool) ($validated['is_test'] ?? false);
 
         return $validated;
+    }
+
+    /**
+     * @return array<string, array<int, string>>
+     */
+    protected function filterRules(): array
+    {
+        return [
+            'name' => ['nullable', 'string', 'max:255'],
+            'bedrooms' => ['nullable', 'integer', 'min:0', 'max:255'],
+            'bathrooms' => ['nullable', 'integer', 'min:0', 'max:255'],
+            'storeys' => ['nullable', 'integer', 'min:1', 'max:255'],
+            'garages' => ['nullable', 'integer', 'min:0', 'max:255'],
+            'price_min' => ['nullable', 'numeric', 'min:0', 'max:99999999999.99'],
+            'price_max' => ['nullable', 'numeric', 'min:0', 'max:99999999999.99'],
+        ];
     }
 }

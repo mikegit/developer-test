@@ -15,6 +15,8 @@ Route::middleware(['auth'])->group(function (): void {
         return view('dashboard');
     })->name('dashboard');
 
+    Route::get('properties/vue', [PropertyController::class, 'vueIndex'])->name('properties.vue-index');
+    Route::get('properties/search', [PropertyController::class, 'search'])->name('properties.search');
     Route::resource('properties', PropertyController::class);
 
     Route::post('/logout', [AuthController::class, 'destroy'])->name('logout');

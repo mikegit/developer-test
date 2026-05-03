@@ -25,6 +25,10 @@
                 box-sizing: border-box;
             }
 
+            [v-cloak] {
+                display: none;
+            }
+
             body {
                 margin: 0;
                 background: #f3f4f6;
@@ -342,5 +346,6 @@
                 {{ $slot }}
             </main>
         </div>
+        @stack('scripts')
     </body>
 </html>
