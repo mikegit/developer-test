@@ -264,8 +264,10 @@
         .element-actions-cell {
             display: flex;
             gap: 8px;
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
             justify-content: flex-start;
+            align-items: center;
+            white-space: nowrap;
         }
 
         .element-alert {
@@ -321,6 +323,11 @@
 
         .element-shell .el-button + .el-button {
             margin-left: 0;
+        }
+
+        .element-actions-cell .el-button {
+            flex: 0 0 auto;
+            white-space: nowrap;
         }
 
         @media (max-width: 960px) {
