@@ -95,11 +95,11 @@
                 <thead>
                     <tr>
                         <th>Name</th>
-                        <th>Price</th>
-                        <th>Bedrooms</th>
-                        <th>Bathrooms</th>
-                        <th>Storeys</th>
-                        <th>Garages</th>
+                        <th class="numeric">Price</th>
+                        <th class="numeric">Bedrooms</th>
+                        <th class="numeric">Bathrooms</th>
+                        <th class="numeric">Storeys</th>
+                        <th class="numeric">Garages</th>
                         <th>Type</th>
                         <th>Actions</th>
                     </tr>
@@ -108,11 +108,11 @@
                     @forelse ($properties as $property)
                         <tr>
                             <td>{{ $property->name }}</td>
-                            <td>${{ number_format((float) $property->price, 2) }}</td>
-                            <td>{{ $property->bedrooms }}</td>
-                            <td>{{ $property->bathrooms }}</td>
-                            <td>{{ $property->storeys }}</td>
-                            <td>{{ $property->garages }}</td>
+                            <td class="numeric currency">${{ number_format((float) $property->price, 2) }}</td>
+                            <td class="numeric">{{ $property->bedrooms }}</td>
+                            <td class="numeric">{{ $property->bathrooms }}</td>
+                            <td class="numeric">{{ $property->storeys }}</td>
+                            <td class="numeric">{{ $property->garages }}</td>
                             <td>
                                 <span class="badge {{ $property->is_test ? 'test' : '' }}">
                                     {{ $property->is_test ? 'Test' : 'Source' }}

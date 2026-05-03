@@ -1,28 +1,70 @@
 (function () {
     const appData = window.appData || {};
+    const numericFilterKeys = ['bedrooms', 'bathrooms', 'storeys', 'garages', 'price_min', 'price_max'];
+    const numberOrNull = (value) => {
+        if (value === '' || value === null || typeof value === 'undefined') {
+            return null;
+        }
 
-    Vue.createApp({
+        return Number(value);
+    };
+
+    const app = Vue.createApp({
         data() {
             return {
                 filters: {
                     name: appData.filters?.name || '',
-                    bedrooms: appData.filters?.bedrooms || '',
-                    bathrooms: appData.filters?.bathrooms || '',
-                    storeys: appData.filters?.storeys || '',
-                    garages: appData.filters?.garages || '',
-                    price_min: appData.filters?.price_min || '',
-                    price_max: appData.filters?.price_max || '',
+                    bedrooms: numberOrNull(appData.filters?.bedrooms),
+                    bathrooms: numberOrNull(appData.filters?.bathrooms),
+                    storeys: numberOrNull(appData.filters?.storeys),
+                    garages: numberOrNull(appData.filters?.garages),
+                    price_min: numberOrNull(appData.filters?.price_min),
+                    price_max: numberOrNull(appData.filters?.price_max),
                 },
                 properties: [],
                 isLoading: false,
                 errorMessage: '',
                 http: null,
+                sortBy: 'name',
+                sortDirection: 'asc',
             };
         },
 
-        mounted() {
-            console.log('prop[ertyApp.mounted');
+        computed: {
+            sortedProperties() {
+                const properties = [...this.properties];
+                const direction = this.sortDirection === 'asc' ? 1 : -1;
+                const sortBy = this.sortBy;
 
+                return properties.sort((left, right) => {
+                    let leftValue = left[sortBy];
+                    let rightValue = right[sortBy];
+
+                    if (sortBy === 'price') {
+                        leftValue = Number(leftValue);
+                        rightValue = Number(rightValue);
+                    } else if (typeof leftValue === 'boolean') {
+                        leftValue = leftValue ? 1 : 0;
+                        rightValue = rightValue ? 1 : 0;
+                    } else if (typeof leftValue === 'string' && typeof rightValue === 'string') {
+                        leftValue = leftValue.toLowerCase();
+                        rightValue = rightValue.toLowerCase();
+                    }
+
+                    if (leftValue < rightValue) {
+                        return -1 * direction;
+                    }
+
+                    if (leftValue > rightValue) {
+                        return 1 * direction;
+                    }
+
+                    return 0;
+                });
+            },
+        },
+
+        mounted() {
             if (!window.AppHttp || typeof window.AppHttp.create !== 'function') {
                 this.errorMessage = 'Unable to start the property list.';
                 return;
@@ -62,12 +104,12 @@
             resetFilters() {
                 this.filters = {
                     name: '',
-                    bedrooms: '',
-                    bathrooms: '',
-                    storeys: '',
-                    garages: '',
-                    price_min: '',
-                    price_max: '',
+                    bedrooms: null,
+                    bathrooms: null,
+                    storeys: null,
+                    garages: null,
+                    price_min: null,
+                    price_max: null,
                 };
 
                 this.fetchProperties();
@@ -77,7 +119,7 @@
                 const filters = {};
 
                 Object.keys(this.filters).forEach((key) => {
-                    if (this.filters[key] !== '') {
+                    if (this.filters[key] !== '' && this.filters[key] !== null) {
                         filters[key] = this.filters[key];
                     }
                 });
@@ -108,6 +150,27 @@
             editUrl(propertyId) {
                 return appData.editUrlTemplate.replace('__PROPERTY_ID__', propertyId);
             },
+
+            setSort(column) {
+                if (this.sortBy === column) {
+                    this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+                    return;
+                }
+
+                this.sortBy = column;
+                this.sortDirection = 'asc';
+            },
+
+            sortIndicator(column) {
+                if (this.sortBy !== column) {
+                    return '';
+                }
+
+                return this.sortDirection === 'asc' ? '▲' : '▼';
+            },
         },
-    }).mount('#propertyApp');
+    });
+
+    app.use(ElementPlus);
+    app.mount('#propertyApp');
 }());

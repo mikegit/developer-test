@@ -7,15 +7,12 @@
 
         <title>{{ $title ?? config('app.name') }}</title>
 
-        @stack('scripts')
-
         <link
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-            integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkR4j8tBtP9fSZ0xpS5upQ6TZfRjW8Wjk6A=="
             crossorigin="anonymous"
             referrerpolicy="no-referrer"
-        >
+        />
 
         <style>
             :root {
@@ -201,6 +198,16 @@
                 background: #f9fafb;
             }
 
+            th.numeric,
+            td.numeric {
+                text-align: right;
+            }
+
+            .currency {
+                font-family: "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+                font-variant-numeric: tabular-nums;
+            }
+
             .actions {
                 display: flex;
                 align-items: center;
@@ -292,6 +299,41 @@
                 padding: 16px 24px;
             }
 
+            .sort-button {
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                padding: 0;
+                border: 0;
+                background: transparent;
+                color: inherit;
+                font: inherit;
+                cursor: pointer;
+            }
+
+            .sort-icon {
+                width: 12px;
+                text-align: center;
+                color: #6b7280;
+            }
+
+            .loading-state {
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .fade-slide-enter-active,
+            .fade-slide-leave-active {
+                transition: opacity 0.18s ease, transform 0.18s ease;
+            }
+
+            .fade-slide-enter-from,
+            .fade-slide-leave-to {
+                opacity: 0;
+                transform: translateY(6px);
+            }
+
             @media (max-width: 768px) {
                 .content,
                 .topbar-inner {
@@ -305,6 +347,8 @@
                 }
             }
         </style>
+
+        @stack('scripts')
     </head>
     <body>
         <div class="shell">

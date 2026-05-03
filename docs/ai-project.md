@@ -121,5 +121,36 @@ Setup vuejs according to ai-guidlines.md
 - add basic vue transistions to improve UI.
 
 
+#7
+
+Now we are going to use the UI library:
+https://element-plus.org/
+
+We are going to:
+
+- Use Vue (lightweight setup)
+- eg
+```javascript
+    const app = Vue.createApp({});
+  app.use(ElementPlus);
+  app.mount('#app');
+
+```
+
+- refactor the index vue view to use these UI components.
+
+#8
+
+- revert the el-table widget in `index-vue` - appears to add unneeded complexity to teh codebase for the moment.
+
+
+
+
+
+
+
+
+
+
 
 
