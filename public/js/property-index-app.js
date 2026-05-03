@@ -21,6 +21,8 @@
         },
 
         mounted() {
+            console.log('prop[ertyApp.mounted');
+
             if (!window.AppHttp || typeof window.AppHttp.create !== 'function') {
                 this.errorMessage = 'Unable to start the property list.';
                 return;

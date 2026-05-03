@@ -111,6 +111,14 @@ Include all properties.  We'll assume the list is not going to be very large.
 Setup vuejs according to ai-guidlines.md
 
 
+#6
+
+- Add in column sorting, use fa icon to show sort direction.  sorting should be clientside
+- Show property price on both index views
+- Right align price value, use a monotype font for currency
+- Use fa-spin to add loading indicator to vue app
+- Ensure 'Loading property list...; removed after loading is completed
+- add basic vue transistions to improve UI.
 
 
 

@@ -1,3 +1,11 @@
+
+@push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.4.38/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.7.7/dist/axios.min.js"></script>
+    <script src="{{ asset('js/utilities/http.js') }}"></script>
+@endpush
+
+
 <x-layouts.app title="Properties Vue">
     <div class="page-header">
         <div>
@@ -20,15 +28,13 @@
     <script>
         window.appData = @json($appData);
     </script>
-
-    <div id="propertyApp">
-        <section class="panel" v-cloak>
-            <div class="panel-body">
-                Loading property list...
-            </div>
-        </section>
-
-        @verbatim
+    @verbatim
+        <div id="propertyApp">
+            <section class="panel" v-cloak>
+                <div class="panel-body">
+                    Loading property list...
+                </div>
+            </section>
             <section class="panel">
                 <div class="panel-body" style="border-bottom: 1px solid #e5e7eb;">
                     <form @submit.prevent="fetchProperties">
@@ -95,60 +101,60 @@
                 <div class="table-wrap">
                     <table>
                         <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Price</th>
-                                <th>Bedrooms</th>
-                                <th>Bathrooms</th>
-                                <th>Storeys</th>
-                                <th>Garages</th>
-                                <th>Type</th>
-                                <th>Actions</th>
-                            </tr>
+                        <tr>
+                            <th>Name</th>
+                            <th>Price</th>
+                            <th>Bedrooms</th>
+                            <th>Bathrooms</th>
+                            <th>Storeys</th>
+                            <th>Garages</th>
+                            <th>Type</th>
+                            <th>Actions</th>
+                        </tr>
                         </thead>
                         <tbody>
-                            <tr v-if="isLoading">
-                                <td colspan="8">Loading properties...</td>
-                            </tr>
-                            <tr v-else-if="properties.length === 0">
-                                <td colspan="8">No properties found.</td>
-                            </tr>
-                            <tr v-for="property in properties" :key="property.id">
-                                <td>{{ property.name }}</td>
-                                <td>${{ formatPrice(property.price) }}</td>
-                                <td>{{ property.bedrooms }}</td>
-                                <td>{{ property.bathrooms }}</td>
-                                <td>{{ property.storeys }}</td>
-                                <td>{{ property.garages }}</td>
-                                <td>
+                        <tr v-if="isLoading">
+                            <td colspan="8">Loading properties...</td>
+                        </tr>
+                        <tr v-else-if="properties.length === 0">
+                            <td colspan="8">No properties found.</td>
+                        </tr>
+                        <tr v-for="property in properties" :key="property.id">
+                            <td>{{ property.name }}</td>
+                            <td>${{ formatPrice(property.price) }}</td>
+                            <td>{{ property.bedrooms }}</td>
+                            <td>{{ property.bathrooms }}</td>
+                            <td>{{ property.storeys }}</td>
+                            <td>{{ property.garages }}</td>
+                            <td>
                                     <span class="badge" :class="{ test: property.is_test }">
                                         {{ property.is_test ? 'Test' : 'Source' }}
                                     </span>
-                                </td>
-                                <td>
-                                    <div class="actions">
-                                        <a :href="showUrl(property.id)" class="button secondary">
-                                            <i class="fa-solid fa-eye" aria-hidden="true"></i>
-                                            <span>View</span>
-                                        </a>
-                                        <a :href="editUrl(property.id)" class="button secondary">
-                                            <i class="fa-solid fa-pen" aria-hidden="true"></i>
-                                            <span>Edit</span>
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
+                            </td>
+                            <td>
+                                <div class="actions">
+                                    <a :href="showUrl(property.id)" class="button secondary">
+                                        <i class="fa-solid fa-eye" aria-hidden="true"></i>
+                                        <span>View</span>
+                                    </a>
+                                    <a :href="editUrl(property.id)" class="button secondary">
+                                        <i class="fa-solid fa-pen" aria-hidden="true"></i>
+                                        <span>Edit</span>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
                         </tbody>
                     </table>
                 </div>
             </section>
-        @endverbatim
-    </div>
+
+        </div>
+    @endverbatim
+
+    @push('scriptsEnd')
+        <script src="{{ asset('js/property-index-app.js') }}"></script>
+    @endpush
+
 </x-layouts.app>
 
-@push('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/vue@3.4.38/dist/vue.global.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios@1.7.7/dist/axios.min.js"></script>
-    <script src="{{ asset('js/utilities/http.js') }}"></script>
-    <script src="{{ asset('js/property-index-app.js') }}"></script>
-@endpush
