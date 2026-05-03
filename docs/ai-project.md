@@ -38,7 +38,70 @@ The Geneva,390600,4,3,2,2
 
 #3 - Basic serverside
 
-- Setup a PropertyController with all basic CRUD endpoints
+- Setup a PropertyController with all basic CRUD endpoints and typical Laravel validation
 - Create the typical views for this
+
+- create a link to this from the homepage after successful login.
+
+#4 
+
+Now we want to get a basic search going for the index view.
+This will be later refactored to use vuejs  but for the moment lets get a basic first version working.
+
+Within the CRUD index view, use Eloquent query to enable these search parameters
+
+    Name: Should also match partial names
+    Bedrooms: Exact match
+    Bathrooms: Exact match
+    Storeys: Exact match
+    Garages: Exact match
+    Price: Range (between $X and $Y) 
+
+Keep it as simple as possible for now.
+
+
+#5 Adding vuejs - upgrading basic app to use simepl vuejs v3
+
+For the index view:
+- Inlcude vue v3 via CDN and axios
+- Within the index view setup the app as follows:
+
+
+Include resources
+
+```bladehtml
+
+@push('scripts')
+    <script src="{{ asset('js/vue-3.3.13/vue.global.js') }}"></script>
+    <script src="{{ asset('js/vendor/axios.min.js') }}"></script>
+    
+    etc
+```
+
+Create app wrapper
+
+- Add in some basic vue css for transistions and v-clock if not already exist
+
+
+```bladehtml
+ <div id="propertyApp" v-cloak></div>
+```
+
+Initial data can be passed to vue app like this
+
+```bladehtml
+
+<script>
+    window.appData = @json($appData);
+</script>
+
+
+```
+
+Setup vuejs according to ai-guidlines.md
+
+
+
+
 
 

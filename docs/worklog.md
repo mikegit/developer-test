@@ -25,6 +25,14 @@ Setup a prompt file for AI
 	[ai-guidelines.md](ai-guidelines.md)
 
 
+Create basic User auth
+
+Create basic project brief setup
+
+
+
+
+
 
 
 
